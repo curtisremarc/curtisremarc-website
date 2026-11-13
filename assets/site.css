@@ -1,0 +1,102 @@
+/* ------------------------------------------------------------------
+   CurtisRemarc.com — static restoration layer
+   The original WordPress/Elementor CSS is loaded unchanged; this file
+   only replaces behaviour that used to come from WordPress scripts,
+   and adds fallbacks for images that were never archived.
+   ------------------------------------------------------------------ */
+
+html { scroll-behavior: smooth; }
+body { overflow-x: hidden; }
+
+/* Stretched sections are sized by site.js; avoid a flash of a narrow layout */
+.elementor-section-stretched { position: relative; }
+
+/* --- Hero: YouTube background video ------------------------------------ */
+.elementor-background-video-container { overflow: hidden; pointer-events: none; }
+.elementor-background-video-embed {
+  position: absolute; border: 0; max-width: none; transform: none !important;
+  opacity: 0; transition: opacity .8s ease;
+}
+.elementor-background-video-embed.cr-ready { opacity: 1; }
+
+/* Hero photo (IMG_2319.jpg) and About photo (IMG_1150-scaled.jpg) were never
+   archived. A dark base plus the video's own poster frame stand in until the
+   original files are dropped back into wp-content/uploads/2022/07/. */
+.elementor-13 .elementor-element.elementor-element-700d7218 {
+  background-color: #111 !important;
+  background-image: url("../wp-content/uploads/2022/07/IMG_2319.jpg"),
+                    url("https://i.ytimg.com/vi/iBuN0VZZa2E/hqdefault.jpg") !important;
+  background-size: cover !important; background-position: center !important;
+}
+.elementor-13 .elementor-element.elementor-element-80f27eb { background-color: #161616 !important; }
+
+/* --- Icons that used the Elementor icon font ---------------------------- */
+.cr-icon { display: inline-flex; align-items: center; justify-content: center; font-style: normal; }
+.cr-icon svg { width: 1em; height: 1em; }
+
+/* --- Sticky header widgets (Elementor Pro "sticky") --------------------- */
+.cr-sticky-active { position: fixed !important; top: 0; z-index: 99; margin-top: 0 !important; }
+
+/* --- Mobile menu --------------------------------------------------------- */
+.elementor-nav-menu--dropdown.elementor-nav-menu__container { z-index: 100; }
+.elementor-nav-menu--stretch .elementor-nav-menu--dropdown.elementor-nav-menu__container { top: 100% !important; }
+.elementor-menu-toggle { cursor: pointer; }
+
+/* --- Gallery (replaces Elementor Pro gallery script) -------------------- */
+.elementor-gallery__container.cr-gallery {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .elementor-gallery__container.cr-gallery { gap: 10px; }
+}
+@media (max-width: 767px) {
+  .elementor-gallery__container.cr-gallery { grid-template-columns: repeat(2, 1fr); }
+}
+.cr-gallery .e-gallery-item { position: relative; aspect-ratio: 1 / 1; overflow: hidden; display: block; }
+.cr-gallery .e-gallery-image {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform .5s ease, opacity .4s ease;
+}
+.cr-gallery .e-gallery-item:hover .e-gallery-image { transform: scale(1.06); }
+
+/* Lightbox */
+.cr-lightbox {
+  position: fixed; inset: 0; z-index: 9999; display: none;
+  align-items: center; justify-content: center;
+  background: rgba(0,0,0,.92);
+}
+.cr-lightbox.open { display: flex; }
+.cr-lightbox img { max-width: 92vw; max-height: 88vh; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
+.cr-lightbox button {
+  position: absolute; background: none; border: 0; color: #fff; cursor: pointer;
+  font-size: 34px; line-height: 1; padding: 16px; opacity: .8;
+}
+.cr-lightbox button:hover, .cr-lightbox button:focus-visible { opacity: 1; }
+.cr-lightbox .cr-lb-close { top: 8px; right: 8px; }
+.cr-lightbox .cr-lb-prev  { left: 8px;  top: 50%; transform: translateY(-50%); }
+.cr-lightbox .cr-lb-next  { right: 8px; top: 50%; transform: translateY(-50%); }
+
+/* --- Testimonials carousel (replaces Swiper) ---------------------------- */
+.elementor-main-swiper.cr-slider { overflow: hidden; position: relative; }
+.cr-slider .swiper-wrapper { display: flex; transition: transform .5s ease; will-change: transform; }
+.cr-slider .swiper-slide { flex: 0 0 100%; width: 100%; box-sizing: border-box; }
+.cr-slider .swiper-pagination { position: static; text-align: center; margin-top: 18px; }
+.cr-slider .swiper-pagination-bullet {
+  display: inline-block; width: 8px; height: 8px; margin: 0 5px; border-radius: 50%;
+  background: #000; opacity: .25; border: 0; padding: 0; cursor: pointer;
+}
+.cr-slider .swiper-pagination-bullet-active { opacity: 1; }
+.elementor-swiper-button { cursor: pointer; }
+
+/* --- Contact form status message --------------------------------------- */
+.cr-form-msg { width: 100%; margin-top: 12px; font-size: 15px; }
+.cr-form-msg.ok  { color: #2e7d32; }
+.cr-form-msg.err { color: #c62828; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cr-slider .swiper-wrapper, .cr-gallery .e-gallery-image { transition: none; }
+}
